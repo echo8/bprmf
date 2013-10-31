@@ -2,6 +2,7 @@ package com.echo8.bprmf;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -28,16 +29,16 @@ public class BPRMF {
 
     private float[] itemBias;
 
-    private final float learnRate;
-    private final float regBias;
-    private final float regU;
-    private final float regI;
-    private final float regJ;
+    private float learnRate;
+    private float regBias;
+    private float regU;
+    private float regI;
+    private float regJ;
 
-    private final Integer numIterations;
-    private final Integer numFactors;
+    private Integer numIterations;
+    private Integer numFactors;
 
-    private final Boolean updateJ;
+    private Boolean updateJ;
 
     private final Random rand;
 
@@ -52,6 +53,38 @@ public class BPRMF {
         this.numFactors = DEFAULT_NUM_FACTORS;
         this.updateJ = DEFAULT_UPDATE_J;
         this.rand = new Random();
+    }
+
+    public void setLearnRate(float learnRate) {
+        this.learnRate = learnRate;
+    }
+
+    public void setRegBias(float regBias) {
+        this.regBias = regBias;
+    }
+
+    public void setRegU(float regU) {
+        this.regU = regU;
+    }
+
+    public void setRegI(float regI) {
+        this.regI = regI;
+    }
+
+    public void setRegJ(float regJ) {
+        this.regJ = regJ;
+    }
+
+    public void setNumIterations(Integer numIterations) {
+        this.numIterations = numIterations;
+    }
+
+    public void setNumFactors(Integer numFactors) {
+        this.numFactors = numFactors;
+    }
+
+    public void setUpdateJ(Boolean updateJ) {
+        this.updateJ = updateJ;
     }
 
     public void train() {
@@ -72,7 +105,14 @@ public class BPRMF {
     }
 
     private List<Integer> getRandomUserIdList() {
-        return null;
+        List<Integer> userIdList = new ArrayList<Integer>();
+        for (int i = 0; i < posFeedbackData.getNumUsers(); i++) {
+            userIdList.add(i);
+        }
+
+        Collections.shuffle(userIdList);
+
+        return userIdList;
     }
 
     private ItemPair sampleItemPair(Integer userId) {
