@@ -110,7 +110,7 @@ public class BPRMF {
             userIdList.add(i);
         }
 
-        Collections.shuffle(userIdList);
+        Collections.shuffle(userIdList, rand);
 
         return userIdList;
     }
