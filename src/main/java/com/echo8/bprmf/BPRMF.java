@@ -7,21 +7,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import com.echo8.bprmf.conf.Defaults;
 import com.echo8.bprmf.data.PosFeedbackData;
 import com.echo8.bprmf.type.FactorMatrix;
 import com.echo8.bprmf.type.ItemPair;
 import com.echo8.bprmf.utils.MatrixUtils;
 
 public class BPRMF {
-    private static final float DEFAULT_LEARN_RATE = 0.05f;
-    private static final float DEFAULT_REG_BIAS = 0.001f;
-    private static final float DEFAULT_REG_U = 0.0025f;
-    private static final float DEFAULT_REG_I = 0.0025f;
-    private static final float DEFAULT_REG_J = 0.00025f;
-    private static final Integer DEFAULT_NUM_ITERATIONS = 30;
-    private static final Integer DEFAULT_NUM_FACTORS = 10;
-    private static final Boolean DEFAULT_UPDATE_J = true;
-
     private final PosFeedbackData posFeedbackData;
 
     private FactorMatrix userFactorMatrix;
@@ -44,14 +36,14 @@ public class BPRMF {
 
     public BPRMF(PosFeedbackData posFeedbackData) {
         this.posFeedbackData = posFeedbackData;
-        this.learnRate = DEFAULT_LEARN_RATE;
-        this.regBias = DEFAULT_REG_BIAS;
-        this.regU = DEFAULT_REG_U;
-        this.regI = DEFAULT_REG_I;
-        this.regJ = DEFAULT_REG_J;
-        this.numIterations = DEFAULT_NUM_ITERATIONS;
-        this.numFactors = DEFAULT_NUM_FACTORS;
-        this.updateJ = DEFAULT_UPDATE_J;
+        this.learnRate = Defaults.DEFAULT_LEARN_RATE;
+        this.regBias = Defaults.DEFAULT_REG_BIAS;
+        this.regU = Defaults.DEFAULT_REG_U;
+        this.regI = Defaults.DEFAULT_REG_I;
+        this.regJ = Defaults.DEFAULT_REG_J;
+        this.numIterations = Defaults.DEFAULT_NUM_ITERATIONS;
+        this.numFactors = Defaults.DEFAULT_NUM_FACTORS;
+        this.updateJ = Defaults.DEFAULT_UPDATE_J;
         this.rand = new Random();
     }
 

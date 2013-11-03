@@ -2,10 +2,9 @@ package com.echo8.bprmf.type;
 
 import java.util.Random;
 
-public class FactorMatrix {
-    private static final float DEFAULT_MEAN = 0.f;
-    private static final float DEFAULT_STD_DEV = 0.1f;
+import com.echo8.bprmf.conf.Defaults;
 
+public class FactorMatrix {
     private final float[] factors;
 
     private final Integer numFactors;
@@ -13,7 +12,11 @@ public class FactorMatrix {
     private final Random rand;
 
     public FactorMatrix(int numElements, int numFactors) {
-        this(numElements, numFactors, DEFAULT_MEAN, DEFAULT_STD_DEV);
+        this(
+            numElements,
+            numFactors,
+            Defaults.DEFAULT_MEAN,
+            Defaults.DEFAULT_STD_DEV);
     }
 
     public FactorMatrix(int numElements, int numFactors, float mean,
