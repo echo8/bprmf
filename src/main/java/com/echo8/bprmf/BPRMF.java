@@ -121,7 +121,7 @@ public class BPRMF {
     }
 
     private void updateFactors(Integer userId, ItemPair itemPair) {
-        float x_uij =
+        float xUIJ =
             itemBias[itemPair.getPosItemId()]
                 - itemBias[itemPair.getNegItemId()]
                 + MatrixUtils.rowScalarProductWithRowDifference(
@@ -131,36 +131,36 @@ public class BPRMF {
                     itemPair.getPosItemId(),
                     itemPair.getNegItemId());
 
-        float one_over_one_plus_ex = (float) (1.0 / (1.0 + Math.exp(x_uij)));
+        float sigmoidAtXUIJ = (float) (1.0 / (1.0 + Math.exp(xUIJ)));
 
         itemBias[itemPair.getPosItemId()] +=
             learnRate
-                * (one_over_one_plus_ex - regBias
+                * (sigmoidAtXUIJ - regBias
                     * itemBias[itemPair.getPosItemId()]);
 
         if (updateJ) {
             itemBias[itemPair.getNegItemId()] +=
                 learnRate
-                    * (one_over_one_plus_ex - regBias
+                    * (sigmoidAtXUIJ - regBias
                         * itemBias[itemPair.getNegItemId()]);
         }
 
         for (int i = 0; i < numFactors; i++) {
-            float w_uf = userFactorMatrix.getValue(userId, i);
-            float h_if = itemFactorMatrix.getValue(itemPair.getPosItemId(), i);
-            float h_jf = itemFactorMatrix.getValue(itemPair.getNegItemId(), i);
+            float wUF = userFactorMatrix.getValue(userId, i);
+            float hIF = itemFactorMatrix.getValue(itemPair.getPosItemId(), i);
+            float hJF = itemFactorMatrix.getValue(itemPair.getNegItemId(), i);
 
-            userFactorMatrix.setValue(userId, i, w_uf
+            userFactorMatrix.setValue(userId, i, wUF
                 + learnRate
-                * ((h_if - h_jf) * one_over_one_plus_ex - regU * w_uf));
-            itemFactorMatrix.setValue(itemPair.getPosItemId(), i, h_if
+                * ((hIF - hJF) * sigmoidAtXUIJ - regU * wUF));
+            itemFactorMatrix.setValue(itemPair.getPosItemId(), i, hIF
                 + learnRate
-                * (w_uf * one_over_one_plus_ex - regI * h_if));
+                * (wUF * sigmoidAtXUIJ - regI * hIF));
 
             if (updateJ) {
-                itemFactorMatrix.setValue(itemPair.getNegItemId(), i, h_jf
+                itemFactorMatrix.setValue(itemPair.getNegItemId(), i, hJF
                     + learnRate
-                    * (-w_uf * one_over_one_plus_ex - regJ * h_jf));
+                    * (-wUF * sigmoidAtXUIJ - regJ * hJF));
             }
         }
     }
