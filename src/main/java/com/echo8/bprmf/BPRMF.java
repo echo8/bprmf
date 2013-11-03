@@ -135,8 +135,7 @@ public class BPRMF {
 
         itemBias[itemPair.getPosItemId()] +=
             learnRate
-                * (sigmoidAtXUIJ - regBias
-                    * itemBias[itemPair.getPosItemId()]);
+                * (sigmoidAtXUIJ - regBias * itemBias[itemPair.getPosItemId()]);
 
         if (updateJ) {
             itemBias[itemPair.getNegItemId()] +=
@@ -163,5 +162,14 @@ public class BPRMF {
                     * (-wUF * sigmoidAtXUIJ - regJ * hJF));
             }
         }
+    }
+
+    public float predict(Integer userId, Integer itemId) {
+        return itemBias[itemId]
+            + MatrixUtils.rowScalarProduct(
+                userFactorMatrix,
+                userId,
+                itemFactorMatrix,
+                itemId);
     }
 }

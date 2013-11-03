@@ -17,4 +17,17 @@ public class MatrixUtils {
 
         return result;
     }
+
+    public static float rowScalarProduct(FactorMatrix userFactorMatrix,
+            Integer userId, FactorMatrix itemFactorMatrix, Integer itemId) {
+        float result = 0;
+
+        for (int i = 0; i < userFactorMatrix.getNumFactors(); i++) {
+            result +=
+                userFactorMatrix.getValue(userId, i)
+                    * itemFactorMatrix.getValue(itemId, i);
+        }
+
+        return result;
+    }
 }
