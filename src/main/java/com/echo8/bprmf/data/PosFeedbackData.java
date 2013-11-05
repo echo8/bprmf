@@ -40,7 +40,23 @@ public class PosFeedbackData {
         return itemIdGenerator.getMaxId() + 1;
     }
 
-    public List<Set<Integer>> getFeedbackList() {
-        return feedbackList;
+    public Set<Integer> getItemIdSetForUserId(Integer userId) {
+        return feedbackList.get(userId);
+    }
+
+    public String getRawUserId(Integer userId) {
+        return userIdGenerator.getRawId(userId);
+    }
+
+    public Integer rawUserIdToUserId(String rawUserId) {
+        return userIdGenerator.getId(rawUserId, false);
+    }
+
+    public String getRawItemId(Integer itemId) {
+        return itemIdGenerator.getRawId(itemId);
+    }
+
+    public Integer rawItemIdToItemId(String rawItemId) {
+        return itemIdGenerator.getId(rawItemId, false);
     }
 }

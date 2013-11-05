@@ -90,8 +90,15 @@ public class BPRMF {
 
         for (int i = 0; i < numIterations; i++) {
             for (Integer userId : getRandomUserIdList()) {
-                ItemPair itemPair = sampleItemPair(userId);
-                updateFactors(userId, itemPair);
+                List<Integer> posItemIdList =
+                    new ArrayList<Integer>(
+                        posFeedbackData.getItemIdSetForUserId(userId));
+                Collections.shuffle(posItemIdList, rand);
+                for (Integer posItemId : posItemIdList) {
+                    Integer negItemId = sampleNegativeItemId(userId);
+                    ItemPair itemPair = new ItemPair(posItemId, negItemId);
+                    updateFactors(userId, itemPair);
+                }
             }
         }
     }
@@ -107,17 +114,14 @@ public class BPRMF {
         return userIdList;
     }
 
-    private ItemPair sampleItemPair(Integer userId) {
-        Set<Integer> itemIdSet = posFeedbackData.getFeedbackList().get(userId);
-        List<Integer> itemIdList = new ArrayList<Integer>(itemIdSet);
-
-        Integer posItemId = itemIdList.get(rand.nextInt(itemIdList.size()));
+    private Integer sampleNegativeItemId(Integer userId) {
+        Set<Integer> itemIdSet = posFeedbackData.getItemIdSetForUserId(userId);
         Integer negItemId = rand.nextInt(posFeedbackData.getNumItems());
         while (itemIdSet.contains(negItemId)) {
             negItemId = rand.nextInt(posFeedbackData.getNumItems());
         }
 
-        return new ItemPair(posItemId, negItemId);
+        return negItemId;
     }
 
     private void updateFactors(Integer userId, ItemPair itemPair) {
@@ -140,7 +144,7 @@ public class BPRMF {
         if (updateJ) {
             itemBias[itemPair.getNegItemId()] +=
                 learnRate
-                    * (sigmoidAtXUIJ - regBias
+                    * (-sigmoidAtXUIJ - regBias
                         * itemBias[itemPair.getNegItemId()]);
         }
 
