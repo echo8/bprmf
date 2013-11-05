@@ -3,7 +3,7 @@ package com.echo8.bprmf.conf;
 public class Defaults {
     public static final float DEFAULT_LEARN_RATE = 0.05f;
 
-    public static final float DEFAULT_REG_BIAS = 0.001f;
+    public static final float DEFAULT_REG_BIAS = 0.f;
 
     public static final float DEFAULT_REG_U = 0.0025f;
 
