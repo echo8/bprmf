@@ -1,5 +1,8 @@
 package com.echo8.bprmf;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -175,5 +178,47 @@ public class BPRMF {
                 userId,
                 itemFactorMatrix,
                 itemId);
+    }
+    
+    public void save(ObjectOutputStream output) throws IOException {
+        posFeedbackData.save(output);
+        userFactorMatrix.save(output);
+        itemFactorMatrix.save(output);
+        
+        output.writeInt(itemBias.length);
+        for (float bias : itemBias) {
+            output.writeFloat(bias);
+        }
+        
+        output.writeFloat(learnRate);
+        output.writeFloat(regBias);
+        output.writeFloat(regU);
+        output.writeFloat(regI);
+        output.writeFloat(regJ);
+        
+        output.writeObject(numIterations);
+        output.writeObject(numFactors);
+        output.writeObject(updateJ);
+    }
+    
+    public void load(ObjectInputStream input) throws ClassNotFoundException, IOException {
+        posFeedbackData.load(input);
+        userFactorMatrix.load(input);
+        itemFactorMatrix.load(input);
+        
+        itemBias = new float[input.readInt()];
+        for (int i = 0; i < itemBias.length; i++) {
+            itemBias[i] = input.readFloat();
+        }
+        
+        learnRate = input.readFloat();
+        regBias = input.readFloat();
+        regU = input.readFloat();
+        regI = input.readFloat();
+        regJ = input.readFloat();
+        
+        numIterations = (Integer) input.readObject();
+        numFactors = (Integer) input.readObject();
+        updateJ = (Boolean) input.readObject();
     }
 }

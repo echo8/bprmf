@@ -1,5 +1,8 @@
 package com.echo8.bprmf.data;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -58,5 +61,15 @@ public class PosFeedbackData {
 
     public Integer rawItemIdToItemId(String rawItemId) {
         return itemIdGenerator.getId(rawItemId, false);
+    }
+    
+    public void save(ObjectOutputStream output) throws IOException {
+        userIdGenerator.save(output);
+        itemIdGenerator.save(output);
+    }
+    
+    public void load(ObjectInputStream input) throws ClassNotFoundException, IOException {
+        userIdGenerator.load(input);
+        itemIdGenerator.load(input);
     }
 }

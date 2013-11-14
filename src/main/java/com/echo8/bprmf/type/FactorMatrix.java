@@ -1,13 +1,16 @@
 package com.echo8.bprmf.type;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Random;
 
 import com.echo8.bprmf.conf.Defaults;
 
 public class FactorMatrix {
-    private final float[] factors;
+    private float[] factors;
 
-    private final Integer numFactors;
+    private Integer numFactors;
 
     private final Random rand;
 
@@ -46,5 +49,21 @@ public class FactorMatrix {
 
     public float getValue(int element, int factor) {
         return factors[element * numFactors + factor];
+    }
+    
+    public void save(ObjectOutputStream output) throws IOException {
+        output.writeInt(factors.length);
+        for (float factor : factors) {
+            output.writeFloat(factor);
+        }
+        output.writeObject(numFactors);
+    }
+    
+    public void load(ObjectInputStream input) throws ClassNotFoundException, IOException {
+        factors = new float[input.readInt()];
+        for (int i = 0; i < factors.length; i++) {
+            factors[i] = input.readFloat();
+        }
+        numFactors = (Integer) input.readObject();
     }
 }
