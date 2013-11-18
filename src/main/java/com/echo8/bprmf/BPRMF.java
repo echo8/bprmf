@@ -17,7 +17,7 @@ import com.echo8.bprmf.type.ItemPair;
 import com.echo8.bprmf.utils.MatrixUtils;
 
 public class BPRMF {
-    private final PosFeedbackData posFeedbackData;
+    private PosFeedbackData posFeedbackData;
 
     private FactorMatrix userFactorMatrix;
     private FactorMatrix itemFactorMatrix;
@@ -37,8 +37,7 @@ public class BPRMF {
 
     private final Random rand;
 
-    public BPRMF(PosFeedbackData posFeedbackData) {
-        this.posFeedbackData = posFeedbackData;
+    public BPRMF() {
         this.learnRate = Defaults.DEFAULT_LEARN_RATE;
         this.regBias = Defaults.DEFAULT_REG_BIAS;
         this.regU = Defaults.DEFAULT_REG_U;
@@ -48,6 +47,14 @@ public class BPRMF {
         this.numFactors = Defaults.DEFAULT_NUM_FACTORS;
         this.updateJ = Defaults.DEFAULT_UPDATE_J;
         this.rand = new Random();
+    }
+
+    public void setPosFeedbackData(PosFeedbackData posFeedbackData) {
+        this.posFeedbackData = posFeedbackData;
+    }
+    
+    public PosFeedbackData getPosFeedbackData() {
+        return posFeedbackData;
     }
 
     public void setLearnRate(float learnRate) {
