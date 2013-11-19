@@ -4,8 +4,7 @@ import com.echo8.bprmf.type.UserItemPair;
 
 public class CsvDataFileFormat implements DataFileFormat {
 
-    public CsvDataFileFormat() {
-    }
+    public CsvDataFileFormat() {}
 
     @Override
     public UserItemPair parseLine(String line) {

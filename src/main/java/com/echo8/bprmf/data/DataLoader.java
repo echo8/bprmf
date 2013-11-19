@@ -8,24 +8,23 @@ import java.io.IOException;
 import com.echo8.bprmf.type.UserItemPair;
 
 public class DataLoader {
-    public static PosFeedbackData loadFromFile(File dataFile,
-            DataFileFormat dataFileFormat) throws IOException {
-        PosFeedbackData posFeedbackData = new PosFeedbackData();
+    public static FeedbackData loadFromFile(File dataFile, DataFileFormat dataFileFormat)
+            throws IOException {
+        FeedbackData feedbackData = new FeedbackData();
 
-        BufferedReader bufferedReader =
-            new BufferedReader(new FileReader(dataFile));
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(dataFile));
         try {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 UserItemPair userItemPair = dataFileFormat.parseLine(line);
                 if (userItemPair != null) {
-                    posFeedbackData.addFeedback(userItemPair);
+                    feedbackData.addFeedback(userItemPair);
                 }
             }
         } finally {
             bufferedReader.close();
         }
 
-        return posFeedbackData;
+        return feedbackData;
     }
 }

@@ -39,12 +39,12 @@ public class IdGenerator {
     public String getRawId(Integer id) {
         return rawIdList.get(id);
     }
-    
+
     public void save(ObjectOutputStream output) throws IOException {
         output.writeObject(rawIdToIdMap);
         output.writeObject(rawIdList);
     }
-    
+
     @SuppressWarnings("unchecked")
     public void load(ObjectInputStream input) throws ClassNotFoundException, IOException {
         rawIdToIdMap = (Map<String, Integer>) input.readObject();

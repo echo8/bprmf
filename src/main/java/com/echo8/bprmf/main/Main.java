@@ -31,27 +31,24 @@ public class Main {
 
         CommandLine cmd = parser.parse(options, args);
 
-        if (cmd.hasOption(CommandLineOptions.HELP_OPTION)) {
+        if (cmd.hasOption(CommandLineOptions.OPTION_HELP)) {
             printHelp(options);
             return;
         }
 
         BPRMF bprmf = getBprmf(cmd);
 
-        if (cmd.hasOption(CommandLineOptions.TRAIN_OPTION)
-            && !cmd.hasOption(CommandLineOptions.RECOMMEND_OPTION)) {
-            File trainFile =
-                new File(cmd.getOptionValue(CommandLineOptions.TRAIN_OPTION));
+        if (cmd.hasOption(CommandLineOptions.OPTION_TRAIN)
+                && !cmd.hasOption(CommandLineOptions.OPTION_RECOMMEND)) {
+            File trainFile = new File(cmd.getOptionValue(CommandLineOptions.OPTION_TRAIN));
             DataFileFormat dataFileFormat = getTrainFileFormat(cmd);
             File modelFile = getOutputFile(cmd);
 
-            bprmf.setPosFeedbackData(DataLoader.loadFromFile(
-                trainFile,
-                dataFileFormat));
+            bprmf.setFeedbackData(DataLoader.loadFromFile(trainFile, dataFileFormat));
             bprmf.train();
             bprmf.save(new ObjectOutputStream(new FileOutputStream(modelFile)));
-        } else if (cmd.hasOption(CommandLineOptions.RECOMMEND_OPTION)
-            && !cmd.hasOption(CommandLineOptions.TRAIN_OPTION)) {
+        } else if (cmd.hasOption(CommandLineOptions.OPTION_RECOMMEND)
+                && !cmd.hasOption(CommandLineOptions.OPTION_TRAIN)) {
             List<String> rawUserIdList = getRawUserIdList(cmd);
 
             File modelFile = getModelFile(cmd);
@@ -62,19 +59,13 @@ public class Main {
             PrintWriter writer = new PrintWriter(resultFile);
 
             for (String rawUserId : rawUserIdList) {
-                Integer userId =
-                    bprmf.getPosFeedbackData().rawUserIdToUserId(rawUserId);
+                Integer userId = bprmf.getFeedbackData().rawUserIdToUserId(rawUserId);
 
                 if (userId != null) {
-                    for (int i = 0; i < bprmf
-                        .getPosFeedbackData()
-                        .getNumItems(); i++) {
+                    for (int i = 0; i < bprmf.getFeedbackData().getNumItems(); i++) {
                         float score = bprmf.predict(userId, i);
-                        writer.println(String.format(
-                            "%s,%s,%s",
-                            rawUserId,
-                            bprmf.getPosFeedbackData().getRawItemId(i),
-                            score));
+                        writer.println(String.format("%s,%s,%s", rawUserId, bprmf
+                                .getFeedbackData().getRawItemId(i), score));
                     }
                 }
             }
@@ -82,52 +73,46 @@ public class Main {
             writer.close();
         } else {
             throw new ParseException(
-                "You must run bprmf with either the '-train' or '-recommend' option.");
+                    "You must run bprmf with either the '-train' or '-recommend' option.");
         }
     }
 
-    private static List<String> getRawUserIdList(CommandLine cmd)
-            throws IOException {
-        return FileUtils.readLines(new File(cmd
-            .getOptionValue(CommandLineOptions.RECOMMEND_OPTION)));
+    private static List<String> getRawUserIdList(CommandLine cmd) throws IOException {
+        return FileUtils
+                .readLines(new File(cmd.getOptionValue(CommandLineOptions.OPTION_RECOMMEND)));
     }
 
     private static File getModelFile(CommandLine cmd) throws ParseException {
-        String modelFilePath =
-            cmd.getOptionValue(CommandLineOptions.MODEL_OPTION);
+        String modelFilePath = cmd.getOptionValue(CommandLineOptions.OPTION_MODEL);
         if (modelFilePath != null) {
             return new File(modelFilePath);
         } else {
             throw new ParseException(
-                "You must use the '-model' option to specify the model file used when making recommendations.");
+                    "You must use the '-model' option to specify the model file used when making recommendations.");
         }
     }
 
     private static File getOutputFile(CommandLine cmd) throws ParseException {
-        String outputFilePath =
-            cmd.getOptionValue(CommandLineOptions.OUTPUT_OPTION);
+        String outputFilePath = cmd.getOptionValue(CommandLineOptions.OPTION_OUTPUT);
         if (outputFilePath != null) {
             return new File(outputFilePath);
         } else {
             throw new ParseException(
-                "You must use the '-output' option to specify where the model/results will be saved to.");
+                    "You must use the '-output' option to specify where the model/results will be saved to.");
         }
     }
 
-    private static DataFileFormat getTrainFileFormat(CommandLine cmd)
-            throws ParseException {
-        String trainFileFormat =
-            cmd.getOptionValue(CommandLineOptions.TRAINFORMAT_OPTION);
+    private static DataFileFormat getTrainFileFormat(CommandLine cmd) throws ParseException {
+        String trainFileFormat = cmd.getOptionValue(CommandLineOptions.OPTION_TRAINFORMAT);
         if (trainFileFormat != null) {
             switch (trainFileFormat) {
-            case "csv":
-                return new CsvDataFileFormat();
-            case "movielens":
-                return new MovieLensDataFileFormat();
-            default:
-                throw new ParseException(
-                    "Did not recognize this train file format: "
-                        + trainFileFormat);
+                case "csv":
+                    return new CsvDataFileFormat();
+                case "movielens":
+                    return new MovieLensDataFileFormat();
+                default:
+                    throw new ParseException("Did not recognize this train file format: "
+                            + trainFileFormat);
             }
         } else {
             return new CsvDataFileFormat();
@@ -137,43 +122,42 @@ public class Main {
     private static BPRMF getBprmf(CommandLine cmd) {
         BPRMF bprmf = new BPRMF();
 
-        String learnRate =
-            cmd.getOptionValue(CommandLineOptions.LEARNRATE_OPTION);
+        String learnRate = cmd.getOptionValue(CommandLineOptions.OPTION_LEARNRATE);
         if (learnRate != null) {
             bprmf.setLearnRate(Float.parseFloat(learnRate));
         }
 
-        String iters = cmd.getOptionValue(CommandLineOptions.ITERS_OPTION);
+        String iters = cmd.getOptionValue(CommandLineOptions.OPTION_ITERS);
         if (iters != null) {
             bprmf.setNumIterations(Integer.parseInt(iters));
         }
 
-        String factors = cmd.getOptionValue(CommandLineOptions.FACTORS_OPTION);
+        String factors = cmd.getOptionValue(CommandLineOptions.OPTION_FACTORS);
         if (factors != null) {
             bprmf.setNumFactors(Integer.parseInt(factors));
         }
 
-        String regBias = cmd.getOptionValue(CommandLineOptions.REGBIAS_OPTION);
+        String regBias = cmd.getOptionValue(CommandLineOptions.OPTION_REGBIAS);
         if (regBias != null) {
             bprmf.setRegBias(Float.parseFloat(regBias));
         }
 
-        String regU = cmd.getOptionValue(CommandLineOptions.REGU_OPTION);
+        String regU = cmd.getOptionValue(CommandLineOptions.OPTION_REGU);
         if (regU != null) {
             bprmf.setRegU(Float.parseFloat(regU));
         }
 
-        String regI = cmd.getOptionValue(CommandLineOptions.REGI_OPTION);
+        String regI = cmd.getOptionValue(CommandLineOptions.OPTION_REGI);
         if (regI != null) {
             bprmf.setRegI(Float.parseFloat(regI));
         }
 
-        String regJ = cmd.getOptionValue(CommandLineOptions.REGJ_OPTION);
+        String regJ = cmd.getOptionValue(CommandLineOptions.OPTION_REGJ);
         if (regJ != null) {
             bprmf.setRegJ(Float.parseFloat(regJ));
         }
 
-        if (cmd.hasOption(CommandLineOptions.SKIPJUPDATE_OPTION)) {
+        if (cmd.hasOption(CommandLineOptions.OPTION_SKIPJUPDATE)) {
             bprmf.setUpdateJ(false);
         }
 

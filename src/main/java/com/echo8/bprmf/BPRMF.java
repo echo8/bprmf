@@ -11,13 +11,13 @@ import java.util.Random;
 import java.util.Set;
 
 import com.echo8.bprmf.conf.Defaults;
-import com.echo8.bprmf.data.PosFeedbackData;
+import com.echo8.bprmf.data.FeedbackData;
 import com.echo8.bprmf.type.FactorMatrix;
 import com.echo8.bprmf.type.ItemPair;
 import com.echo8.bprmf.utils.MatrixUtils;
 
 public class BPRMF {
-    private PosFeedbackData posFeedbackData;
+    private FeedbackData feedbackData;
 
     private FactorMatrix userFactorMatrix;
     private FactorMatrix itemFactorMatrix;
@@ -49,12 +49,12 @@ public class BPRMF {
         this.rand = new Random();
     }
 
-    public void setPosFeedbackData(PosFeedbackData posFeedbackData) {
-        this.posFeedbackData = posFeedbackData;
+    public void setFeedbackData(FeedbackData feedbackData) {
+        this.feedbackData = feedbackData;
     }
-    
-    public PosFeedbackData getPosFeedbackData() {
-        return posFeedbackData;
+
+    public FeedbackData getFeedbackData() {
+        return feedbackData;
     }
 
     public void setLearnRate(float learnRate) {
@@ -90,19 +90,16 @@ public class BPRMF {
     }
 
     public void train() {
-        itemBias = new float[posFeedbackData.getNumItems()];
+        itemBias = new float[feedbackData.getNumItems()];
         Arrays.fill(itemBias, 0.f);
 
-        userFactorMatrix =
-            new FactorMatrix(posFeedbackData.getNumUsers(), numFactors);
-        itemFactorMatrix =
-            new FactorMatrix(posFeedbackData.getNumItems(), numFactors);
+        userFactorMatrix = new FactorMatrix(feedbackData.getNumUsers(), numFactors);
+        itemFactorMatrix = new FactorMatrix(feedbackData.getNumItems(), numFactors);
 
         for (int i = 0; i < numIterations; i++) {
             for (Integer userId : getRandomUserIdList()) {
                 List<Integer> posItemIdList =
-                    new ArrayList<Integer>(
-                        posFeedbackData.getItemIdSetForUserId(userId));
+                        new ArrayList<Integer>(feedbackData.getItemIdSetForUserId(userId));
                 Collections.shuffle(posItemIdList, rand);
                 for (Integer posItemId : posItemIdList) {
                     Integer negItemId = sampleNegativeItemId(userId);
@@ -115,7 +112,7 @@ public class BPRMF {
 
     private List<Integer> getRandomUserIdList() {
         List<Integer> userIdList = new ArrayList<Integer>();
-        for (int i = 0; i < posFeedbackData.getNumUsers(); i++) {
+        for (int i = 0; i < feedbackData.getNumUsers(); i++) {
             userIdList.add(i);
         }
 
@@ -125,10 +122,10 @@ public class BPRMF {
     }
 
     private Integer sampleNegativeItemId(Integer userId) {
-        Set<Integer> itemIdSet = posFeedbackData.getItemIdSetForUserId(userId);
-        Integer negItemId = rand.nextInt(posFeedbackData.getNumItems());
+        Set<Integer> itemIdSet = feedbackData.getItemIdSetForUserId(userId);
+        Integer negItemId = rand.nextInt(feedbackData.getNumItems());
         while (itemIdSet.contains(negItemId)) {
-            negItemId = rand.nextInt(posFeedbackData.getNumItems());
+            negItemId = rand.nextInt(feedbackData.getNumItems());
         }
 
         return negItemId;
@@ -136,26 +133,19 @@ public class BPRMF {
 
     private void updateFactors(Integer userId, ItemPair itemPair) {
         float xUIJ =
-            itemBias[itemPair.getPosItemId()]
-                - itemBias[itemPair.getNegItemId()]
-                + MatrixUtils.rowScalarProductWithRowDifference(
-                    userFactorMatrix,
-                    userId,
-                    itemFactorMatrix,
-                    itemPair.getPosItemId(),
-                    itemPair.getNegItemId());
+                itemBias[itemPair.getPosItemId()]
+                        - itemBias[itemPair.getNegItemId()]
+                        + MatrixUtils.rowScalarProductWithRowDifference(userFactorMatrix, userId,
+                                itemFactorMatrix, itemPair.getPosItemId(), itemPair.getNegItemId());
 
         float sigmoidAtXUIJ = (float) (1.0 / (1.0 + Math.exp(xUIJ)));
 
         itemBias[itemPair.getPosItemId()] +=
-            learnRate
-                * (sigmoidAtXUIJ - regBias * itemBias[itemPair.getPosItemId()]);
+                learnRate * (sigmoidAtXUIJ - regBias * itemBias[itemPair.getPosItemId()]);
 
         if (updateJ) {
             itemBias[itemPair.getNegItemId()] +=
-                learnRate
-                    * (-sigmoidAtXUIJ - regBias
-                        * itemBias[itemPair.getNegItemId()]);
+                    learnRate * (-sigmoidAtXUIJ - regBias * itemBias[itemPair.getNegItemId()]);
         }
 
         for (int i = 0; i < numFactors; i++) {
@@ -163,67 +153,60 @@ public class BPRMF {
             float hIF = itemFactorMatrix.getValue(itemPair.getPosItemId(), i);
             float hJF = itemFactorMatrix.getValue(itemPair.getNegItemId(), i);
 
-            userFactorMatrix.setValue(userId, i, wUF
-                + learnRate
-                * ((hIF - hJF) * sigmoidAtXUIJ - regU * wUF));
-            itemFactorMatrix.setValue(itemPair.getPosItemId(), i, hIF
-                + learnRate
-                * (wUF * sigmoidAtXUIJ - regI * hIF));
+            userFactorMatrix.setValue(userId, i, wUF + learnRate
+                    * ((hIF - hJF) * sigmoidAtXUIJ - regU * wUF));
+            itemFactorMatrix.setValue(itemPair.getPosItemId(), i, hIF + learnRate
+                    * (wUF * sigmoidAtXUIJ - regI * hIF));
 
             if (updateJ) {
-                itemFactorMatrix.setValue(itemPair.getNegItemId(), i, hJF
-                    + learnRate
-                    * (-wUF * sigmoidAtXUIJ - regJ * hJF));
+                itemFactorMatrix.setValue(itemPair.getNegItemId(), i, hJF + learnRate
+                        * (-wUF * sigmoidAtXUIJ - regJ * hJF));
             }
         }
     }
 
     public float predict(Integer userId, Integer itemId) {
         return itemBias[itemId]
-            + MatrixUtils.rowScalarProduct(
-                userFactorMatrix,
-                userId,
-                itemFactorMatrix,
-                itemId);
+                + MatrixUtils.rowScalarProduct(userFactorMatrix, userId, itemFactorMatrix, itemId);
     }
-    
+
     public void save(ObjectOutputStream output) throws IOException {
-        posFeedbackData.save(output);
+        feedbackData.save(output);
         userFactorMatrix.save(output);
         itemFactorMatrix.save(output);
-        
+
         output.writeInt(itemBias.length);
         for (float bias : itemBias) {
             output.writeFloat(bias);
         }
-        
+
         output.writeFloat(learnRate);
         output.writeFloat(regBias);
         output.writeFloat(regU);
         output.writeFloat(regI);
         output.writeFloat(regJ);
-        
+
         output.writeObject(numIterations);
         output.writeObject(numFactors);
         output.writeObject(updateJ);
     }
-    
+
     public void load(ObjectInputStream input) throws ClassNotFoundException, IOException {
-        posFeedbackData.load(input);
+        feedbackData.load(input);
         userFactorMatrix.load(input);
         itemFactorMatrix.load(input);
-        
+
         itemBias = new float[input.readInt()];
         for (int i = 0; i < itemBias.length; i++) {
             itemBias[i] = input.readFloat();
         }
-        
+
         learnRate = input.readFloat();
         regBias = input.readFloat();
         regU = input.readFloat();
         regI = input.readFloat();
         regJ = input.readFloat();
-        
+
         numIterations = (Integer) input.readObject();
         numFactors = (Integer) input.readObject();
         updateJ = (Boolean) input.readObject();

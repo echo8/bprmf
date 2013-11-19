@@ -15,15 +15,10 @@ public class FactorMatrix {
     private final Random rand;
 
     public FactorMatrix(int numElements, int numFactors) {
-        this(
-            numElements,
-            numFactors,
-            Defaults.DEFAULT_MEAN,
-            Defaults.DEFAULT_STD_DEV);
+        this(numElements, numFactors, Defaults.DEFAULT_MEAN, Defaults.DEFAULT_STD_DEV);
     }
 
-    public FactorMatrix(int numElements, int numFactors, float mean,
-            float stdDev) {
+    public FactorMatrix(int numElements, int numFactors, float mean, float stdDev) {
         this.factors = new float[numElements * numFactors];
 
         this.numFactors = numFactors;
@@ -50,7 +45,7 @@ public class FactorMatrix {
     public float getValue(int element, int factor) {
         return factors[element * numFactors + factor];
     }
-    
+
     public void save(ObjectOutputStream output) throws IOException {
         output.writeInt(factors.length);
         for (float factor : factors) {
@@ -58,7 +53,7 @@ public class FactorMatrix {
         }
         output.writeObject(numFactors);
     }
-    
+
     public void load(ObjectInputStream input) throws ClassNotFoundException, IOException {
         factors = new float[input.readInt()];
         for (int i = 0; i < factors.length; i++) {
