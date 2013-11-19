@@ -14,6 +14,10 @@ public class FactorMatrix {
 
     private final Random rand;
 
+    public FactorMatrix() {
+        this.rand = new Random();
+    }
+
     public FactorMatrix(int numElements, int numFactors) {
         this(numElements, numFactors, Defaults.DEFAULT_MEAN, Defaults.DEFAULT_STD_DEV);
     }

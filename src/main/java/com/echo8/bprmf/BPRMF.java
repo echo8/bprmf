@@ -192,8 +192,11 @@ public class BPRMF {
     }
 
     public void load(ObjectInputStream input) throws ClassNotFoundException, IOException {
+        feedbackData = new FeedbackData();
         feedbackData.load(input);
+        userFactorMatrix = new FactorMatrix();
         userFactorMatrix.load(input);
+        itemFactorMatrix = new FactorMatrix();
         itemFactorMatrix.load(input);
 
         itemBias = new float[input.readInt()];
