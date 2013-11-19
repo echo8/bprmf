@@ -1,0 +1,27 @@
+<assembly>
+	<id>distribute</id>
+	<formats>
+		<format>jar</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<includes>
+				<include>com.echo8:bprmf</include>
+			</includes>
+			<unpack>true</unpack>
+		</dependencySet>
+
+		<dependencySet>
+			<excludes>
+				<exclude>com.echo8:bprmf</exclude>
+			</excludes>
+			<unpack>true</unpack>
+			<unpackOptions>
+				<excludes>
+					<exclude>/META-INF/**/*</exclude>
+				</excludes>
+			</unpackOptions>
+		</dependencySet>
+	</dependencySets>
+</assembly>
