@@ -3,6 +3,8 @@ package com.echo8.bprmf.main;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
+import com.echo8.bprmf.conf.Defaults;
+
 public class CommandLineOptions {
     public static final String HELP_OPTION = "help";
     public static final String TRAIN_OPTION = "train";
@@ -61,43 +63,64 @@ public class CommandLineOptions {
         options.addOption(OptionBuilder
             .withArgName("value")
             .hasArg()
-            .withDescription("set learn rate (default: )")
+            .withDescription(
+                String.format(
+                    "set learn rate (default: %s)",
+                    Defaults.DEFAULT_LEARN_RATE))
             .create(LEARNRATE_OPTION));
 
         options.addOption(OptionBuilder
             .withArgName("value")
             .hasArg()
-            .withDescription("set number of training iterations (default: )")
+            .withDescription(
+                String.format(
+                    "set number of training iterations (default: %s)",
+                    Defaults.DEFAULT_NUM_ITERATIONS))
             .create(ITERS_OPTION));
 
         options.addOption(OptionBuilder
             .withArgName("value")
             .hasArg()
-            .withDescription("set number of factors (default: )")
+            .withDescription(
+                String.format(
+                    "set number of factors (default: %s)",
+                    Defaults.DEFAULT_NUM_FACTORS))
             .create(FACTORS_OPTION));
 
         options.addOption(OptionBuilder
             .withArgName("value")
             .hasArg()
-            .withDescription("set item bias regularization (default: )")
+            .withDescription(
+                String.format(
+                    "set item bias regularization (default: %s)",
+                    Defaults.DEFAULT_REG_BIAS))
             .create(REGBIAS_OPTION));
 
         options.addOption(OptionBuilder
             .withArgName("value")
             .hasArg()
-            .withDescription("set user update regularization (default: )")
+            .withDescription(
+                String.format(
+                    "set user update regularization (default: %s)",
+                    Defaults.DEFAULT_REG_U))
             .create(REGU_OPTION));
 
         options.addOption(OptionBuilder
             .withArgName("value")
             .hasArg()
-            .withDescription("set item i update regularization (default: )")
+            .withDescription(
+                String.format(
+                    "set item i update regularization (default: %s)",
+                    Defaults.DEFAULT_REG_I))
             .create(REGI_OPTION));
 
         options.addOption(OptionBuilder
             .withArgName("value")
             .hasArg()
-            .withDescription("set item j update regularization (default: )")
+            .withDescription(
+                String.format(
+                    "set item j update regularization (default: %.5f)",
+                    Defaults.DEFAULT_REG_J))
             .create(REGJ_OPTION));
 
         options.addOption(
