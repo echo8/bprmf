@@ -1,19 +1,19 @@
 package com.echo8.bprmf.type;
 
 public class ItemPair {
-    private final Integer posItemId;
-    private final Integer negItemId;
+    private final int posItemId;
+    private final int negItemId;
 
-    public ItemPair(Integer posItemId, Integer negItemId) {
+    public ItemPair(int posItemId, int negItemId) {
         this.posItemId = posItemId;
         this.negItemId = negItemId;
     }
 
-    public Integer getPosItemId() {
+    public int getPosItemId() {
         return posItemId;
     }
 
-    public Integer getNegItemId() {
+    public int getNegItemId() {
         return negItemId;
     }
 }

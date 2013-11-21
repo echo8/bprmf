@@ -17,7 +17,7 @@ public class IdGenerator {
         this.rawIdList = new ArrayList<String>();
     }
 
-    public Integer getId(String str) {
+    public int getId(String str) {
         return getId(str, true);
     }
 
@@ -32,7 +32,7 @@ public class IdGenerator {
         return id;
     }
 
-    public Integer getMaxId() {
+    public int getMaxId() {
         return rawIdToIdMap.size() - 1;
     }
 

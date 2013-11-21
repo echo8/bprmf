@@ -10,7 +10,7 @@ import com.echo8.bprmf.conf.Defaults;
 public class FactorMatrix {
     private float[] factors;
 
-    private Integer numFactors;
+    private int numFactors;
 
     private final Random rand;
 
@@ -38,7 +38,7 @@ public class FactorMatrix {
         }
     }
 
-    public Integer getNumFactors() {
+    public int getNumFactors() {
         return numFactors;
     }
 

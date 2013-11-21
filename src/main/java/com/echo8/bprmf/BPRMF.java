@@ -30,10 +30,10 @@ public class BPRMF {
     private float regI;
     private float regJ;
 
-    private Integer numIterations;
-    private Integer numFactors;
+    private int numIterations;
+    private int numFactors;
 
-    private Boolean updateJ;
+    private boolean updateJ;
 
     private final Random rand;
 
@@ -77,15 +77,15 @@ public class BPRMF {
         this.regJ = regJ;
     }
 
-    public void setNumIterations(Integer numIterations) {
+    public void setNumIterations(int numIterations) {
         this.numIterations = numIterations;
     }
 
-    public void setNumFactors(Integer numFactors) {
+    public void setNumFactors(int numFactors) {
         this.numFactors = numFactors;
     }
 
-    public void setUpdateJ(Boolean updateJ) {
+    public void setUpdateJ(boolean updateJ) {
         this.updateJ = updateJ;
     }
 

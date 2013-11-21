@@ -4,7 +4,7 @@ import com.echo8.bprmf.type.FactorMatrix;
 
 public class MatrixUtils {
     public static float rowScalarProductWithRowDifference(FactorMatrix userFactorMatrix,
-            Integer userId, FactorMatrix itemFactorMatrix, Integer posItemId, Integer negItemId) {
+            int userId, FactorMatrix itemFactorMatrix, int posItemId, int negItemId) {
         float result = 0;
 
         for (int i = 0; i < userFactorMatrix.getNumFactors(); i++) {
@@ -17,8 +17,8 @@ public class MatrixUtils {
         return result;
     }
 
-    public static float rowScalarProduct(FactorMatrix userFactorMatrix, Integer userId,
-            FactorMatrix itemFactorMatrix, Integer itemId) {
+    public static float rowScalarProduct(FactorMatrix userFactorMatrix, int userId,
+            FactorMatrix itemFactorMatrix, int itemId) {
         float result = 0;
 
         for (int i = 0; i < userFactorMatrix.getNumFactors(); i++) {

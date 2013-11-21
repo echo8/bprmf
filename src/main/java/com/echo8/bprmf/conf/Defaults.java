@@ -11,13 +11,13 @@ public class Defaults {
 
     public static final float DEFAULT_REG_J = 0.00025f;
 
-    public static final Integer DEFAULT_NUM_ITERATIONS = 30;
+    public static final int DEFAULT_NUM_ITERATIONS = 30;
 
-    public static final Integer DEFAULT_NUM_FACTORS = 10;
+    public static final int DEFAULT_NUM_FACTORS = 10;
 
-    public static final Boolean DEFAULT_UPDATE_J = true;
+    public static final boolean DEFAULT_UPDATE_J = true;
 
-    public static final Integer DEFAULT_POSITIVE_THRESHOLD = 4;
+    public static final int DEFAULT_MIN_POS_VALUE = 4;
 
     public static final float DEFAULT_MEAN = 0.f;
 

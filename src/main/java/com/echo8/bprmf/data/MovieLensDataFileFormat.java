@@ -4,13 +4,13 @@ import com.echo8.bprmf.conf.Defaults;
 import com.echo8.bprmf.type.UserItemPair;
 
 public class MovieLensDataFileFormat implements DataFileFormat {
-    private final Integer positiveThreshold;
+    private final int positiveThreshold;
 
     public MovieLensDataFileFormat() {
-        this.positiveThreshold = Defaults.DEFAULT_POSITIVE_THRESHOLD;
+        this.positiveThreshold = Defaults.DEFAULT_MIN_POS_VALUE;
     }
 
-    public MovieLensDataFileFormat(Integer positiveThreshold) {
+    public MovieLensDataFileFormat(int positiveThreshold) {
         this.positiveThreshold = positiveThreshold;
     }
 
