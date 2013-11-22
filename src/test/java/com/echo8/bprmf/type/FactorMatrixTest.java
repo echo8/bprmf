@@ -14,16 +14,16 @@ public class FactorMatrixTest {
     }
 
     @Test
-    public void testSetAndGetValue() {
+    public void testGetValue() {
         FactorMatrix factorMatrix = new FactorMatrix(5, 5);
 
-        float value = 0.f;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                factorMatrix.setValue(i, j, value);
-                assertThat(factorMatrix.getValue(i, j), is(value));
-                value++;
-            }
-        }
+        factorMatrix.setValue(3, 2, 4.f);
+        assertThat(factorMatrix.getValue(3, 2), is(4.f));
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetValueWithInvalidElement() {
+        FactorMatrix factorMatrix = new FactorMatrix(5, 5);
+        factorMatrix.getValue(6, 2);
     }
 }
