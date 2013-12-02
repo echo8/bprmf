@@ -38,14 +38,14 @@ public class BPRMF {
     private final Random rand;
 
     public BPRMF() {
-        this.learnRate = Defaults.DEFAULT_LEARN_RATE;
-        this.regBias = Defaults.DEFAULT_REG_BIAS;
-        this.regU = Defaults.DEFAULT_REG_U;
-        this.regI = Defaults.DEFAULT_REG_I;
-        this.regJ = Defaults.DEFAULT_REG_J;
-        this.numIterations = Defaults.DEFAULT_NUM_ITERATIONS;
-        this.numFactors = Defaults.DEFAULT_NUM_FACTORS;
-        this.updateJ = Defaults.DEFAULT_UPDATE_J;
+        this.learnRate = Defaults.LEARN_RATE;
+        this.regBias = Defaults.REG_BIAS;
+        this.regU = Defaults.REG_U;
+        this.regI = Defaults.REG_I;
+        this.regJ = Defaults.REG_J;
+        this.numIterations = Defaults.NUM_ITERATIONS;
+        this.numFactors = Defaults.NUM_FACTORS;
+        this.updateJ = Defaults.UPDATE_J;
         this.rand = new Random();
     }
 

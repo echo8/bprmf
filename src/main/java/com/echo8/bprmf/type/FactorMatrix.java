@@ -19,7 +19,7 @@ public class FactorMatrix {
     }
 
     public FactorMatrix(int numElements, int numFactors) {
-        this(numElements, numFactors, Defaults.DEFAULT_MEAN, Defaults.DEFAULT_STD_DEV);
+        this(numElements, numFactors, Defaults.MEAN, Defaults.STD_DEV);
     }
 
     public FactorMatrix(int numElements, int numFactors, float mean, float stdDev) {
