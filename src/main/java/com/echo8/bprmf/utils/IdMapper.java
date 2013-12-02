@@ -8,11 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class IdGenerator {
+public class IdMapper {
     private Map<String, Integer> rawIdToIdMap;
     private List<String> rawIdList;
 
-    public IdGenerator() {
+    public IdMapper() {
         this.rawIdToIdMap = new HashMap<String, Integer>();
         this.rawIdList = new ArrayList<String>();
     }

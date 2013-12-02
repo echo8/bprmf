@@ -15,23 +15,23 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.echo8.bprmf.type.UserItemPair;
-import com.echo8.bprmf.utils.IdGenerator;
+import com.echo8.bprmf.utils.IdMapper;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FeedbackDataTest {
     @Mock
-    private IdGenerator userIdGenerator;
+    private IdMapper userIdMapper;
 
     @Mock
-    private IdGenerator itemIdGenerator;
+    private IdMapper itemIdMapper;
 
     @InjectMocks
     private FeedbackData feedbackData;
 
     @Test
     public void testGetItemIdSetForUserId() {
-        when(userIdGenerator.getId("user1")).thenReturn(1);
-        when(itemIdGenerator.getId("item1")).thenReturn(2);
+        when(userIdMapper.getId("user1")).thenReturn(1);
+        when(itemIdMapper.getId("item1")).thenReturn(2);
 
         feedbackData.addFeedback(new UserItemPair("user1", "item1"));
 

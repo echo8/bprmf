@@ -9,24 +9,24 @@ import java.util.List;
 import java.util.Set;
 
 import com.echo8.bprmf.type.UserItemPair;
-import com.echo8.bprmf.utils.IdGenerator;
+import com.echo8.bprmf.utils.IdMapper;
 
 public class FeedbackData {
     private List<Set<Integer>> feedbackList;
 
-    private IdGenerator userIdGenerator;
-    private IdGenerator itemIdGenerator;
+    private IdMapper userIdMapper;
+    private IdMapper itemIdMapper;
 
     public FeedbackData() {
         this.feedbackList = new ArrayList<Set<Integer>>();
 
-        this.userIdGenerator = new IdGenerator();
-        this.itemIdGenerator = new IdGenerator();
+        this.userIdMapper = new IdMapper();
+        this.itemIdMapper = new IdMapper();
     }
 
     public void addFeedback(UserItemPair userItemPair) {
-        Integer userId = userIdGenerator.getId(userItemPair.getUser());
-        Integer itemId = itemIdGenerator.getId(userItemPair.getItem());
+        Integer userId = userIdMapper.getId(userItemPair.getUser());
+        Integer itemId = itemIdMapper.getId(userItemPair.getItem());
 
         for (int i = feedbackList.size(); i < userId + 1; i++) {
             feedbackList.add(new HashSet<Integer>());
@@ -36,11 +36,11 @@ public class FeedbackData {
     }
 
     public int getNumUsers() {
-        return userIdGenerator.getMaxId() + 1;
+        return userIdMapper.getMaxId() + 1;
     }
 
     public int getNumItems() {
-        return itemIdGenerator.getMaxId() + 1;
+        return itemIdMapper.getMaxId() + 1;
     }
 
     public Set<Integer> getItemIdSetForUserId(Integer userId) {
@@ -48,28 +48,28 @@ public class FeedbackData {
     }
 
     public String getRawUserId(Integer userId) {
-        return userIdGenerator.getRawId(userId);
+        return userIdMapper.getRawId(userId);
     }
 
     public Integer rawUserIdToUserId(String rawUserId) {
-        return userIdGenerator.getId(rawUserId, false);
+        return userIdMapper.getId(rawUserId, false);
     }
 
     public String getRawItemId(Integer itemId) {
-        return itemIdGenerator.getRawId(itemId);
+        return itemIdMapper.getRawId(itemId);
     }
 
     public Integer rawItemIdToItemId(String rawItemId) {
-        return itemIdGenerator.getId(rawItemId, false);
+        return itemIdMapper.getId(rawItemId, false);
     }
 
     public void save(ObjectOutputStream output) throws IOException {
-        userIdGenerator.save(output);
-        itemIdGenerator.save(output);
+        userIdMapper.save(output);
+        itemIdMapper.save(output);
     }
 
     public void load(ObjectInputStream input) throws ClassNotFoundException, IOException {
-        userIdGenerator.load(input);
-        itemIdGenerator.load(input);
+        userIdMapper.load(input);
+        itemIdMapper.load(input);
     }
 }
