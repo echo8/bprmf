@@ -19,6 +19,7 @@ public class CommandLineOptions {
     public static final String REGU = "regu";
     public static final String REGI = "regi";
     public static final String REGJ = "regj";
+    public static final String SEED = "seed";
     public static final String SKIPJUPDATE = "skipjupdate";
 
     @SuppressWarnings("static-access")
@@ -91,6 +92,9 @@ public class CommandLineOptions {
                 .withDescription(
                         String.format("set item j update regularization (default: %.5f)",
                                 Defaults.REG_J)).create(REGJ));
+
+        options.addOption(OptionBuilder.withArgName("value").hasArg()
+                .withDescription("initialize random number generator with value").create(SEED));
 
         options.addOption(SKIPJUPDATE, false, "skip the update for item j");
 

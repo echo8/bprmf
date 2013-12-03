@@ -6,17 +6,14 @@ import java.io.ObjectOutputStream;
 import java.util.Random;
 
 import com.echo8.bprmf.conf.Defaults;
+import com.echo8.bprmf.utils.RandomUtils;
 
 public class FactorMatrix {
     private float[] factors;
 
     private int numFactors;
 
-    private final Random rand;
-
-    public FactorMatrix() {
-        this.rand = new Random();
-    }
+    public FactorMatrix() {}
 
     public FactorMatrix(int numElements, int numFactors) {
         this(numElements, numFactors, Defaults.MEAN, Defaults.STD_DEV);
@@ -27,12 +24,11 @@ public class FactorMatrix {
 
         this.numFactors = numFactors;
 
-        this.rand = new Random();
-
         initNormal(mean, stdDev);
     }
 
     private void initNormal(float mean, float stdDev) {
+        Random rand = RandomUtils.getInstance();
         for (int i = 0; i < factors.length; i++) {
             factors[i] = (float) (rand.nextGaussian() * stdDev + mean);
         }

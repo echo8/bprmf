@@ -15,6 +15,7 @@ import com.echo8.bprmf.data.FeedbackData;
 import com.echo8.bprmf.type.FactorMatrix;
 import com.echo8.bprmf.type.ItemPair;
 import com.echo8.bprmf.utils.MatrixUtils;
+import com.echo8.bprmf.utils.RandomUtils;
 
 public class BPRMF {
     private FeedbackData feedbackData;
@@ -35,8 +36,6 @@ public class BPRMF {
 
     private boolean updateJ;
 
-    private final Random rand;
-
     public BPRMF() {
         this.learnRate = Defaults.LEARN_RATE;
         this.regBias = Defaults.REG_BIAS;
@@ -46,7 +45,6 @@ public class BPRMF {
         this.numIterations = Defaults.NUM_ITERATIONS;
         this.numFactors = Defaults.NUM_FACTORS;
         this.updateJ = Defaults.UPDATE_J;
-        this.rand = new Random();
     }
 
     public void setFeedbackData(FeedbackData feedbackData) {
@@ -100,7 +98,7 @@ public class BPRMF {
             for (Integer userId : getRandomUserIdList()) {
                 List<Integer> posItemIdList =
                         new ArrayList<Integer>(feedbackData.getItemIdSetForUserId(userId));
-                Collections.shuffle(posItemIdList, rand);
+                Collections.shuffle(posItemIdList, RandomUtils.getInstance());
                 for (Integer posItemId : posItemIdList) {
                     Integer negItemId = sampleNegativeItemId(userId);
                     ItemPair itemPair = new ItemPair(posItemId, negItemId);
@@ -116,12 +114,13 @@ public class BPRMF {
             userIdList.add(i);
         }
 
-        Collections.shuffle(userIdList, rand);
+        Collections.shuffle(userIdList, RandomUtils.getInstance());
 
         return userIdList;
     }
 
     private Integer sampleNegativeItemId(Integer userId) {
+        Random rand = RandomUtils.getInstance();
         Set<Integer> itemIdSet = feedbackData.getItemIdSetForUserId(userId);
         Integer negItemId = rand.nextInt(feedbackData.getNumItems());
         while (itemIdSet.contains(negItemId)) {

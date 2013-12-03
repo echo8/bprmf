@@ -22,6 +22,7 @@ import com.echo8.bprmf.data.CsvDataFileFormat;
 import com.echo8.bprmf.data.DataFileFormat;
 import com.echo8.bprmf.data.DataLoader;
 import com.echo8.bprmf.data.MovieLensDataFileFormat;
+import com.echo8.bprmf.utils.RandomUtils;
 
 public class Main {
 
@@ -37,6 +38,10 @@ public class Main {
         }
 
         BPRMF bprmf = getBprmf(cmd);
+
+        if (cmd.hasOption(CommandLineOptions.SEED)) {
+            RandomUtils.init(Long.parseLong(cmd.getOptionValue(CommandLineOptions.SEED)));
+        }
 
         if (cmd.hasOption(CommandLineOptions.TRAIN) && !cmd.hasOption(CommandLineOptions.RECOMMEND)) {
             File trainFile = new File(cmd.getOptionValue(CommandLineOptions.TRAIN));
