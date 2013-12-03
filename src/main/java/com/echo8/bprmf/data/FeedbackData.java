@@ -66,10 +66,13 @@ public class FeedbackData {
     public void save(ObjectOutputStream output) throws IOException {
         userIdMapper.save(output);
         itemIdMapper.save(output);
+        output.writeObject(feedbackList);
     }
 
+    @SuppressWarnings("unchecked")
     public void load(ObjectInputStream input) throws ClassNotFoundException, IOException {
         userIdMapper.load(input);
         itemIdMapper.load(input);
+        feedbackList = (List<Set<Integer>>) input.readObject();
     }
 }

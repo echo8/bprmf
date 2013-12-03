@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -66,10 +67,14 @@ public class Main {
                 Integer userId = bprmf.getFeedbackData().rawUserIdToUserId(rawUserId);
 
                 if (userId != null) {
+                    Set<Integer> trainItemIdSet =
+                            bprmf.getFeedbackData().getItemIdSetForUserId(userId);
                     for (int i = 0; i < bprmf.getFeedbackData().getNumItems(); i++) {
-                        float score = bprmf.predict(userId, i);
-                        writer.println(String.format("%s,%s,%s", rawUserId, bprmf.getFeedbackData()
-                                .getRawItemId(i), score));
+                        if (!trainItemIdSet.contains(i)) {
+                            float score = bprmf.predict(userId, i);
+                            writer.println(String.format("%s,%s,%s", rawUserId, bprmf
+                                    .getFeedbackData().getRawItemId(i), score));
+                        }
                     }
                 }
             }
