@@ -1,4 +1,4 @@
-An implementation of Bayesian Personalized Ranking[1] (with matrix factorization model) in Java.
+An implementation of Bayesian Personalized Ranking[1] (with a matrix factorization model) in Java.
 
 It's largely based off of the C# implementation in MyMediaLite (http://mymedialite.net/).
 

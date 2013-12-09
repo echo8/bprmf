@@ -45,45 +45,52 @@ public class Main {
         }
 
         if (cmd.hasOption(CommandLineOptions.TRAIN) && !cmd.hasOption(CommandLineOptions.RECOMMEND)) {
-            File trainFile = new File(cmd.getOptionValue(CommandLineOptions.TRAIN));
-            DataFileFormat dataFileFormat = getTrainFileFormat(cmd);
-            File modelFile = getOutputFile(cmd);
-
-            bprmf.setFeedbackData(DataLoader.loadFromFile(trainFile, dataFileFormat));
-            bprmf.train();
-            bprmf.save(new ObjectOutputStream(new FileOutputStream(modelFile)));
+            train(cmd, bprmf);
         } else if (cmd.hasOption(CommandLineOptions.RECOMMEND)
                 && !cmd.hasOption(CommandLineOptions.TRAIN)) {
-            List<String> rawUserIdList = getRawUserIdList(cmd);
-
-            File modelFile = getModelFile(cmd);
-            File resultFile = getOutputFile(cmd);
-
-            bprmf.load(new ObjectInputStream(new FileInputStream(modelFile)));
-
-            PrintWriter writer = new PrintWriter(resultFile);
-
-            for (String rawUserId : rawUserIdList) {
-                Integer userId = bprmf.getFeedbackData().rawUserIdToUserId(rawUserId);
-
-                if (userId != null) {
-                    Set<Integer> trainItemIdSet =
-                            bprmf.getFeedbackData().getItemIdSetForUserId(userId);
-                    for (int i = 0; i < bprmf.getFeedbackData().getNumItems(); i++) {
-                        if (!trainItemIdSet.contains(i)) {
-                            float score = bprmf.predict(userId, i);
-                            writer.println(String.format("%s,%s,%s", rawUserId, bprmf
-                                    .getFeedbackData().getRawItemId(i), score));
-                        }
-                    }
-                }
-            }
-
-            writer.close();
+            recommend(cmd, bprmf);
         } else {
             throw new ParseException(
                     "You must run bprmf with either the '-train' or '-recommend' option.");
         }
+    }
+
+    private static void train(CommandLine cmd, BPRMF bprmf) throws Exception {
+        File trainFile = new File(cmd.getOptionValue(CommandLineOptions.TRAIN));
+        DataFileFormat dataFileFormat = getTrainFileFormat(cmd);
+        File modelFile = getOutputFile(cmd);
+
+        bprmf.setFeedbackData(DataLoader.loadFromFile(trainFile, dataFileFormat));
+        bprmf.train();
+        bprmf.save(new ObjectOutputStream(new FileOutputStream(modelFile)));
+    }
+
+    private static void recommend(CommandLine cmd, BPRMF bprmf) throws Exception {
+        List<String> rawUserIdList = getRawUserIdList(cmd);
+
+        File modelFile = getModelFile(cmd);
+        File resultFile = getOutputFile(cmd);
+
+        bprmf.load(new ObjectInputStream(new FileInputStream(modelFile)));
+
+        PrintWriter writer = new PrintWriter(resultFile);
+
+        for (String rawUserId : rawUserIdList) {
+            Integer userId = bprmf.getFeedbackData().rawUserIdToUserId(rawUserId);
+
+            if (userId != null) {
+                Set<Integer> trainItemIdSet = bprmf.getFeedbackData().getItemIdSetForUserId(userId);
+                for (int i = 0; i < bprmf.getFeedbackData().getNumItems(); i++) {
+                    if (!trainItemIdSet.contains(i)) {
+                        float score = bprmf.predict(userId, i);
+                        writer.println(String.format("%s,%s,%s", rawUserId, bprmf.getFeedbackData()
+                                .getRawItemId(i), score));
+                    }
+                }
+            }
+        }
+
+        writer.close();
     }
 
     private static List<String> getRawUserIdList(CommandLine cmd) throws IOException {
