@@ -6,3 +6,7 @@ It's largely based off of the C# implementation in MyMediaLite (http://mymediali
        BPR: Bayesian Personalized Ranking from Implicit Feedback. UAI 2009.
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/echo8/bprmf/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/echo8/bprmf/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
