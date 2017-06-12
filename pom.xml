@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.echo8</groupId>
 	<artifactId>bprmf</artifactId>
@@ -55,6 +55,48 @@
 						</manifest>
 					</archive>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>train</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>com.echo8.bprmf.main.Main</mainClass>
+							<arguments>
+								<argument>-output</argument>
+								<argument>model</argument>
+								<argument>-train</argument>
+								<argument>../serendipity/data/LEENHISTORY.tab</argument>
+								<argument>-trainformat</argument>
+								<argument>cdr</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>recommend</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>com.echo8.bprmf.main.Main</mainClass>
+							<arguments>
+								<argument>-output</argument>
+								<argument>recommendations</argument>
+								<argument>-model</argument>
+								<argument>model</argument>
+								<argument>-trainformat</argument>
+								<argument>cdr</argument>
+								<argument>-recommend</argument>
+								<argument>rec_users</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
